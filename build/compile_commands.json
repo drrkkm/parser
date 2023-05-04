@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/test.dir/main.cpp.o -c \"/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp\"",
+  "file": "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp"
+},
+{
+  "directory": "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/test.dir/FormulaParser.cpp.o -c \"/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp\"",
+  "file": "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp"
+}
+]

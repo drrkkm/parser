@@ -73,29 +73,29 @@ CMakeFiles/test.dir/main.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/main.cpp.o: ../main.cpp
 CMakeFiles/test.dir/main.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/drrkkm/Рабочий стол/DAFElab/DAFElab/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/main.cpp.o -MF CMakeFiles/test.dir/main.cpp.o.d -o CMakeFiles/test.dir/main.cpp.o -c "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/main.cpp.o -MF CMakeFiles/test.dir/main.cpp.o.d -o CMakeFiles/test.dir/main.cpp.o -c "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp"
 
 CMakeFiles/test.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp" > CMakeFiles/test.dir/main.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp" > CMakeFiles/test.dir/main.cpp.i
 
 CMakeFiles/test.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp" -o CMakeFiles/test.dir/main.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/main.cpp" -o CMakeFiles/test.dir/main.cpp.s
 
 CMakeFiles/test.dir/FormulaParser.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/FormulaParser.cpp.o: ../FormulaParser.cpp
 CMakeFiles/test.dir/FormulaParser.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/drrkkm/Рабочий стол/DAFElab/DAFElab/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test.dir/FormulaParser.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/FormulaParser.cpp.o -MF CMakeFiles/test.dir/FormulaParser.cpp.o.d -o CMakeFiles/test.dir/FormulaParser.cpp.o -c "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/FormulaParser.cpp.o -MF CMakeFiles/test.dir/FormulaParser.cpp.o.d -o CMakeFiles/test.dir/FormulaParser.cpp.o -c "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp"
 
 CMakeFiles/test.dir/FormulaParser.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/FormulaParser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp" > CMakeFiles/test.dir/FormulaParser.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp" > CMakeFiles/test.dir/FormulaParser.cpp.i
 
 CMakeFiles/test.dir/FormulaParser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/FormulaParser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp" -o CMakeFiles/test.dir/FormulaParser.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/drrkkm/Рабочий стол/DAFElab/DAFElab/FormulaParser.cpp" -o CMakeFiles/test.dir/FormulaParser.cpp.s
 
 # Object files for target test
 test_OBJECTS = \

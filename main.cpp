@@ -8,8 +8,6 @@ int main() {
     getline(std::cin, input);
 
     auto m = parser.parse(input);
-    
-    for (int i = 0; i < m.size(); i++)
-    std::cout << m[i];
+    std::cout << m;
     
 }

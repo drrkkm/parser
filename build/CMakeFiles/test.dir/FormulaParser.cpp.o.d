@@ -1647,4 +1647,6 @@ CMakeFiles/test.dir/FormulaParser.cpp.o: \
  /usr/local/include/boost/spirit/home/x3/string/symbols.hpp \
  /usr/local/include/boost/spirit/home/x3/string/tst.hpp \
  /usr/local/include/boost/spirit/home/x3/string/detail/tst.hpp \
- /home/drrkkm/Рабочий\ стол/DAFElab/DAFElab/plugin_api.hpp
+ /home/drrkkm/Рабочий\ стол/DAFElab/DAFElab/plugin_api.hpp \
+ /home/drrkkm/Рабочий\ стол/DAFElab/DAFElab/utils.hpp \
+ /home/drrkkm/Рабочий\ стол/DAFElab/DAFElab/operands.hpp
