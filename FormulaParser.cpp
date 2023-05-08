@@ -2,9 +2,9 @@
 #include "operands.hpp"
 
 typedef boost::tokenizer<boost::escaped_list_separator<char>> Tokenizer;
-//equality_op_t::equality_op_t(){
-//    add ("=", EqualityExpression::Equality);
-//}
+equality_op_t::equality_op_t(){
+    add ("=", EqualityExpression::Equality);
+}
 
 unary_op_t::unary_op_t() {
     add("+",   UnaryExpression::Plus);
@@ -31,39 +31,75 @@ binary_op::binary_op(int precedence) {
 }
 
 std::vector<double> FormulaParser::parse(std::string input_t){
+
     input_t.erase(std::remove_if(input_t.begin(), input_t.end(), isspace), input_t.end());
-    const char * input = input_t.c_str();
-    std::cout << input_t;
-    auto end = input + std::strlen(input);
-    Expression result;
-    auto ok = phrase_parse(input, end, expr, x3::space, result);
-    std::cout << "FormulaParser::preParse(ok) : " << ok << "\n";
-//     //std::cout << result << "\n";
-     if (ok && input == end) return eval(result);
-     throw std::runtime_error(std::string("Failed at: `") + input + "`");
-    std::cout << "FormulaParser::parse(exp) : " << exp << "\n";
+    //std::cout << input_t.find("=");
+    if(input_t.find("=") == 0) throw std::runtime_error("Тo data to the right of equality");
+    else if(input_t.find("=") >= input_t.size()) throw std::runtime_error("No equality");
+    else if(input_t.find("=") == 0) throw std::runtime_error("Тo data to the right of equality");
+    else if(input_t.find("=") == input_t.rfind("=")){
+        std::string first_token_t = input_t.substr(0, input_t.find("="));
+        std::string second_token_t = input_t.substr(input_t.find("=")+1, input_t.size() - 1);
+        //std::cout << first_token << " " << second_token << "\n";
+        const char * first_token = first_token_t.c_str();
+        const char * second_token = second_token_t.c_str();
+
+        auto f_end = first_token + std::strlen(first_token);
+        auto s_end = second_token + std::strlen(second_token);
+        //const char * input = input_t.c_str();
+        //auto end = input + std::strlen(input);
+        Expression f_result;
+        Expression s_result;
+        auto f_ok = phrase_parse(first_token, f_end, expr, x3::space, f_result);
+        auto s_ok = phrase_parse(second_token, s_end, expr, x3::space, s_result);
+        //std::cout << "FormulaParser::preParse(ok) : " << ok << "\n";
+        //std::cout << f_result.name;
+        if (f_ok && first_token == f_end && s_ok && second_token == s_end) Equality(f_result, s_result);
+        return std::vector<double>{};
+        //throw std::runtime_error(std::string("Failed at: `") + first + "`");
+        std::cout << "FormulaParser::parse(exp) : " << exp << "\n";
+    }
+    else throw std::runtime_error("To much equality");
     return std::vector<double>{};
 }
 
-// Expression FormulaParser::preParse(const char* input) {
-//     auto end = input + std::strlen(input);
-//     Expression result;
-//     auto ok = phrase_parse(input, end, expr, x3::space, result);
-//     std::cout << "FormulaParser::preParse(ok) : " << ok << "\n";
-//     //std::cout << result << "\n";
-//     if (ok && input == end) return result;
-//     throw std::runtime_error(std::string("Failed at: `") + input + "`");
-// }
+void FormulaParser::Equality(Expression first, Expression second) { 
 
-// std::vector<double> FormulaParser::parse(std::string input){
-//     input.erase(std::remove_if(input.begin(), input.end(), isspace), input.end());
-//     auto exp = eval(preParse(input.c_str()));
-//     std::cout << "FormulaParser::parse(exp) : " << exp << "\n";
-//     return exp;
-// }
+    auto visitor = boost::make_overloaded_function(
+        [](double x) -> std::vector<double> { throw std::runtime_error("You cannot assign anything to a number"); },
+
+        [&](const UnaryExpression& first) -> std::vector <double> {
+            throw std::runtime_error("You cannot assign anything to a unary operation");
+        },
+        [&](const FunctionCall& first) -> std::vector<double> {
+           //save function
+        },
+        [&](const BinaryExpression& first) -> std::vector<double> {
+            throw std::runtime_error("You cannot assign anything to a binary operation");
+        }  
+        ,
+        [&](const VariableExpression &first) -> std::vector<double> {
+            auto data = eval(second);
+            if (data.size() > 1) throw std::runtime_error("You can't assign multiple values to a constant");
+            constants[first.name] = data[0];
+        },
+        [&](const IndexExpression &first) -> std::vector<double> {
+            auto data = eval(second);
+            if (first.args.size() == 1 && data.size() == 1){
+                std::vector<double> &manager_data = manager.getVariable(first.name);
+                manager_data[first.args[0]] = data[0];
+            }  // manager.return_variable(e.name, e.args.at(0));
+            if (first.args.size() == 2 && first.args[0] - first.args[1] == data.size()) {
+                std::vector<double> &manager_data = manager.getVariable(first.name);
+                for (int item = first.args[0]; item <= first.args[1]; item++)
+                    manager_data[first.args[item]] = data[item];
+            }
+            throw std::runtime_error("Too much indexes");
+        });
+    return boost::apply_visitor(visitor, first, second);
+}
 
 std::vector<double> FormulaParser::eval_binary(BinaryExpression::op_t op, std::vector<double> a, std::vector<double> b) { 
-    //if (a.size() > 1 && b.size() > 1) throw std::runtime_error("Impossible to ");
 
     switch (op) {
     case BinaryExpression::Plus: return a + b;
@@ -81,7 +117,7 @@ std::vector<double> FormulaParser::eval(Expression e) {
     auto visitor = boost::make_overloaded_function(
         [](double x) -> std::vector<double> { return std::vector<double>{x}; },
 
-        [&](const UnaryExpression& e) -> std::vector<double> {
+        [&](const UnaryExpression& e) -> std::vector <double> {
             auto a = eval(e.arg)[0];
             switch (e.op) {
                 case UnaryExpression::Plus: return std::vector<double>{+a};
@@ -115,8 +151,8 @@ std::vector<double> FormulaParser::eval(Expression e) {
             std::vector <double> args1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
             if (e.args.size() == 1) return std::vector<double>{args1[e.args[0]]}; // manager.return_variable(e.name, e.args.at(0));
             if (e.args.size() == 2) {
-                int g = eval(e.args.at(1))[0];
-                int f = eval(e.args.at(0))[0];
+                int g = eval(e.args.at(1))[0]; // e.args[0]
+                int f = eval(e.args.at(0))[0]; // e.args[1]
                 if (g - f < 0) throw std::runtime_error("Wrong indexes");
                 for (int item = f; item <= g; item++) {
                         data.push_back(args1[item]);
@@ -127,8 +163,6 @@ std::vector<double> FormulaParser::eval(Expression e) {
         },
         [&](const BinaryExpression& e) -> std::vector<double> {   
             auto a = eval(e.first);
-            //std::cout << "a " << a << "\n";
-            //std::cout << "FormulaParser::eval(BinaryExpression case) : ";
             for (auto&& o : e.ops) {
                 auto b = eval(o.second);
                 a = eval_binary(o.first, a, b);
