@@ -30,37 +30,36 @@ binary_op::binary_op(int precedence) {
     }
 }
 
-std::vector<double> FormulaParser::parse(std::string input_t){
+void FormulaParser::parse(std::string input_t){
 
     input_t.erase(std::remove_if(input_t.begin(), input_t.end(), isspace), input_t.end());
-    //std::cout << input_t.find("=");
+
     if(input_t.find("=") == 0) throw std::runtime_error("Тo data to the right of equality");
     else if(input_t.find("=") >= input_t.size()) throw std::runtime_error("No equality");
     else if(input_t.find("=") == 0) throw std::runtime_error("Тo data to the right of equality");
     else if(input_t.find("=") == input_t.rfind("=")){
         std::string first_token_t = input_t.substr(0, input_t.find("="));
         std::string second_token_t = input_t.substr(input_t.find("=")+1, input_t.size() - 1);
-        //std::cout << first_token << " " << second_token << "\n";
+
         const char * first_token = first_token_t.c_str();
         const char * second_token = second_token_t.c_str();
 
         auto f_end = first_token + std::strlen(first_token);
         auto s_end = second_token + std::strlen(second_token);
-        //const char * input = input_t.c_str();
-        //auto end = input + std::strlen(input);
+
         Expression f_result;
         Expression s_result;
         auto f_ok = phrase_parse(first_token, f_end, expr, x3::space, f_result);
         auto s_ok = phrase_parse(second_token, s_end, expr, x3::space, s_result);
-        //std::cout << "FormulaParser::preParse(ok) : " << ok << "\n";
-        //std::cout << f_result.name;
+
+        Node firstNode = Node(f_result);
+        Node secondNode = Node(s_result);
+
         if (f_ok && first_token == f_end && s_ok && second_token == s_end) Equality(f_result, s_result);
-        return std::vector<double>{};
         //throw std::runtime_error(std::string("Failed at: `") + first + "`");
         std::cout << "FormulaParser::parse(exp) : " << exp << "\n";
     }
     else throw std::runtime_error("To much equality");
-    return std::vector<double>{};
 }
 
 void FormulaParser::Equality(Expression first, Expression second) { 
@@ -85,12 +84,11 @@ void FormulaParser::Equality(Expression first, Expression second) {
         },
         [&](const IndexExpression &first) -> std::vector<double> {
             auto data = eval(second);
+            std::vector<double> &manager_data = manager.getRowData(first.name);
             if (first.args.size() == 1 && data.size() == 1){
-                std::vector<double> &manager_data = manager.getVariable(first.name);
                 manager_data[first.args[0]] = data[0];
             }  // manager.return_variable(e.name, e.args.at(0));
             if (first.args.size() == 2 && first.args[0] - first.args[1] == data.size()) {
-                std::vector<double> &manager_data = manager.getVariable(first.name);
                 for (int item = first.args[0]; item <= first.args[1]; item++)
                     manager_data[first.args[item]] = data[item];
             }
@@ -105,18 +103,18 @@ std::vector<double> FormulaParser::eval_binary(BinaryExpression::op_t op, std::v
     case BinaryExpression::Plus: return a + b;
     case BinaryExpression::Minus: return a - b;
     case BinaryExpression::Mul: return a * b;
-     case BinaryExpression::Div: return a / b;
-    // case BinaryExpression::Mod: return (int)a % (int)b;
-    //case BinaryExpression::Pow: return pow(a, b);
+    case BinaryExpression::Div: return a / b;
+    case BinaryExpression::Pow: return a ^ b;
     default: throw std::runtime_error("Unknown operator");
     }
 }
-
+//std::vector<double> errors
 std::vector<double> FormulaParser::eval(Expression e) {
     std::vector <double> data{};
     auto visitor = boost::make_overloaded_function(
-        [](double x) -> std::vector<double> { return std::vector<double>{x}; },
-
+        [](double x) -> std::vector<double> {
+            return std::vector<double>{x}; 
+        },
         [&](const UnaryExpression& e) -> std::vector <double> {
             auto a = eval(e.arg)[0];
             switch (e.op) {
@@ -148,14 +146,13 @@ std::vector<double> FormulaParser::eval(Expression e) {
             throw std::runtime_error("Unknown variable");
         },
         [&](const IndexExpression &e) -> std::vector<double> {
-            std::vector <double> args1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-            if (e.args.size() == 1) return std::vector<double>{args1[e.args[0]]}; // manager.return_variable(e.name, e.args.at(0));
-            if (e.args.size() == 2) {
-                int g = eval(e.args.at(1))[0]; // e.args[0]
-                int f = eval(e.args.at(0))[0]; // e.args[1]
-                if (g - f < 0) throw std::runtime_error("Wrong indexes");
-                for (int item = f; item <= g; item++) {
-                        data.push_back(args1[item]);
+            std::vector<double> &manager_data = manager.getRowData(e.name);
+
+            if (e.args.size() == 1 && manager_data.size() >= 1) return std::vector<double>{manager_data[e.args[0]]}; // manager.return_variable(e.name, e.args.at(0));
+            if (e.args.size() == 2 && manager_data.size() >= 2) {
+                if (e.args[0] - e.args[1] < 0) throw std::runtime_error("Wrong indexes");
+                for (int item = e.args[0]; item <= e.args[1]; item++) {
+                        data.push_back(manager_data[item]);
                     }
                     return data;
             }

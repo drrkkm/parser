@@ -7,7 +7,7 @@ int main() {
     std::string input;
     getline(std::cin, input);
 
-    auto m = parser.parse(input);
-    std::cout << m;
+    parser.parse(input);
+    //std::cout << m;
     
 }

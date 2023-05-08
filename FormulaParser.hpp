@@ -32,6 +32,14 @@ using Expression = boost::variant<
     , boost::recursive_wrapper<struct BinaryExpression>
     >;
 
+struct Node{
+    Expression expression;
+    std::vector<double> errors{};
+
+    Node(Expression e) : expression(e){};
+    Node(Expression e, std::vector<double> errors) : expression(e), errors(errors){};
+};
+
 struct VariableExpression {
     std::string name;
 };
@@ -168,7 +176,7 @@ private:
 public:
     FormulaParser() { load_constants(path);};
     ~FormulaParser() {};
-    std::vector<double> parse(std::string input_t);
+    void parse(std::string input_t);
     //std::vector <double> parse(std::string input);
 };
 
